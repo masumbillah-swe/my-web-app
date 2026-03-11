@@ -3,62 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biriyani Lover Masum</title>
+    <title>Masum's Viral Fun Hub</title>
     <style>
-        :root { --primary: #ff4757; --secondary: #ffa502; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f1f2f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; }
-        h1 { color: var(--primary); margin-bottom: 10px; }
-        .biriyani-emoji { font-size: 80px; margin: 20px 0; transition: transform 0.3s; }
-        .biriyani-emoji:hover { transform: scale(1.2) rotate(10deg); }
-        .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
-        button { border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-yes { background: var(--primary); color: white; }
-        .btn-no { background: #ced4da; color: #495057; }
-        button:hover { opacity: 0.8; transform: translateY(-3px); }
-        #message { margin-top: 20px; font-weight: bold; color: #2f3542; min-height: 24px; }
+        :root { --p: #6c5ce7; --s: #ff7675; --bg: #f9f9f9; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; margin-bottom: 20px; text-align: center; }
+        h2 { color: var(--p); margin-top: 0; }
+        input { width: 80%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 10px; outline: none; }
+        input:focus { border-color: var(--p); }
+        button { background: var(--p); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        button:hover { opacity: 0.9; transform: scale(1.02); }
+        .result-box { margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: #2d3436; min-height: 50px; }
+        .game-btn { background: var(--s); font-size: 1.2rem; height: 80px; margin-top: 10px; }
+        .stats { display: flex; justify-content: space-between; margin-top: 10px; font-weight: bold; color: #636e72; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Masum's Biriyani Meter 🍗</h1>
-        <p>Bondhu, tui ki ajke amake Biriyani khawaybi?</p>
-        
-        <div class="biriyani-emoji">🥘</div>
+    <div class="card">
+        <h2>🔍 Character Scanner</h2>
+        <p>Bondhur nam lekh, tar ashol chehera dekh!</p>
+        <input type="text" id="nameInput" placeholder="Enter name...">
+        <button onclick="scanCharacter()">Scan Now!</button>
+        <div id="scanResult" class="result-box"></div>
+    </div>
 
-        <div class="btn-group">
-            <button class="btn-yes" onclick="showResponse('yes')">Hyan, Chol!</button>
-            <button class="btn-no" id="noBtn" onmouseover="moveButton()">Na, Porer Bar</button>
+    <div class="card">
+        <h2>⚡ Click Speed Test</h2>
+        <p>১০ সেকেন্ডে কয়বার ক্লিক করতে পারিস?</p>
+        <div class="stats">
+            <span>Time: <span id="timer">10</span>s</span>
+            <span>Clicks: <span id="score">0</span></span>
         </div>
-
-        <p id="message"></p>
+        <button class="game-btn" id="clickBtn" onclick="handleGameClick()">START CLICKING!</button>
+        <div id="gameMsg" class="result-box"></div>
+        <button style="background:#b2bec3; margin-top:5px;" onclick="resetGame()">Reset Game</button>
     </div>
 
     <script>
-        function showResponse(type) {
-            const msg = document.getElementById('message');
-            if(type === 'yes') {
-                msg.innerText = "Yahoo! Ami ready, kothay jabo bol? 🏃‍♂️💨";
-                msg.style.color = "#2ed573";
-                confettiEffect();
+        // --- Logic: Character Scanner ---
+        function scanCharacter() {
+            const name = document.getElementById('nameInput').value;
+            const results = [
+                "১০০% বাটপার, দূরে থাকাই ভালো! 🐍",
+                "ভবিষ্যতের বিলিওনেয়ার, খাতির রাখিস! 💰",
+                "মুখে এক, মনে আরেক! 🎭",
+                "হদ্দ কিপটা, চা-ও খাওয়ায় না! ☕",
+                "একদম খাঁটি মানুষ (বিরিয়ানি প্রিয়)! 🍗",
+                "সারাদিন ঘুমায় আর ফেসবুক চালায়! 😴"
+            ];
+            if(!name) return alert("Nam kothay??");
+            const res = results[Math.floor(Math.random() * results.length)];
+            document.getElementById('scanResult').innerText = name + " holo " + res;
+        }
+
+        // --- Logic: Click Speed Test ---
+        let clicks = 0;
+        let timeLeft = 10;
+        let timerStarted = false;
+        let timerInterval;
+
+        function handleGameClick() {
+            if(!timerStarted) {
+                startTimer();
+                timerStarted = true;
+                document.getElementById('gameMsg').innerText = "Chalaitay thak! 🏃‍♂️";
+            }
+            if(timeLeft > 0) {
+                clicks++;
+                document.getElementById('score').innerText = clicks;
             }
         }
 
-        // Funny part: 'No' button ta mouse nilei shore jabe!
-        function moveButton() {
-            const btn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            
-            btn.style.position = 'absolute';
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
         }
 
-        function confettiEffect() {
-            // Tui jodi chash, ami pore ekhane asol confetti add kore dibo.
-            alert("Congratulations! Tor first app ekhon viral hobe! 🎉");
+        function endGame() {
+            let rank = clicks > 60 ? "Pro Legend! 🔥" : (clicks > 30 ? "Motamoti Bhalo" : "Ekdom Slow! 🐢");
+            document.getElementById('gameMsg').innerText = `Khel shesh! Tor rank: ${rank}`;
+            document.getElementById('clickBtn').disabled = true;
+        }
+
+        function resetGame() {
+            clearInterval(timerInterval);
+            clicks = 0;
+            timeLeft = 10;
+            timerStarted = false;
+            document.getElementById('score').innerText = "0";
+            document.getElementById('timer').innerText = "10";
+            document.getElementById('gameMsg').innerText = "";
+            document.getElementById('clickBtn').disabled = false;
+            document.getElementById('clickBtn').innerText = "START CLICKING!";
         }
     </script>
 </body>
