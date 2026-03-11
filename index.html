@@ -1,63 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masum's Viral Fun Hub</title>
+    <title>মাসুমের ভাইরাল ফান হাব</title>
     <style>
-        :root { --p: #6c5ce7; --s: #ff7675; --bg: #f9f9f9; }
+        :root { --p: #25D366; --s: #ff7675; --bg: #f0f2f5; --primary-dark: #075E54; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; margin-bottom: 20px; text-align: center; }
-        h2 { color: var(--p); margin-top: 0; }
-        input { width: 80%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 10px; outline: none; }
-        input:focus { border-color: var(--p); }
-        button { background: var(--p); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
-        button:hover { opacity: 0.9; transform: scale(1.02); }
-        .result-box { margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: #2d3436; min-height: 50px; }
+        h2 { color: #2d3436; margin-top: 0; }
+        input { width: 85%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 15px; outline: none; font-size: 16px; }
+        button { background: #6c5ce7; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 16px; }
+        .share-btn { background: var(--p); margin-top: 10px; display: none; }
+        .share-btn:hover { background: var(--primary-dark); }
+        .result-box { margin-top: 15px; font-weight: bold; font-size: 1.2rem; color: #d63031; min-height: 50px; }
         .game-btn { background: var(--s); font-size: 1.2rem; height: 80px; margin-top: 10px; }
-        .stats { display: flex; justify-content: space-between; margin-top: 10px; font-weight: bold; color: #636e72; }
+        .stats { display: flex; justify-content: space-between; margin: 10px 0; font-weight: bold; color: #636e72; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>🔍 Character Scanner</h2>
-        <p>Bondhur nam lekh, tar ashol chehera dekh!</p>
-        <input type="text" id="nameInput" placeholder="Enter name...">
-        <button onclick="scanCharacter()">Scan Now!</button>
+        <h2>🔍 বন্ধু কেমন? স্ক্যান করো!</h2>
+        <p>বন্ধুর নাম লিখে তার আসল রূপ দেখে নাও!</p>
+        <input type="text" id="nameInput" placeholder="বন্ধুর নাম লেখো...">
+        <button onclick="scanCharacter()">চেক করো!</button>
         <div id="scanResult" class="result-box"></div>
+        <button id="shareChar" class="share-btn" onclick="shareOnWhatsApp('char')">হোয়াটসঅ্যাপে শেয়ার করো ✅</button>
     </div>
 
     <div class="card">
-        <h2>⚡ Click Speed Test</h2>
-        <p>১০ সেকেন্ডে কয়বার ক্লিক করতে পারিস?</p>
+        <h2>⚡ ক্লিক স্পিড টেস্ট</h2>
+        <p>১০ সেকেন্ডে কয়বার ক্লিক করতে পারো?</p>
         <div class="stats">
-            <span>Time: <span id="timer">10</span>s</span>
-            <span>Clicks: <span id="score">0</span></span>
+            <span>সময়: <span id="timer">10</span>সে.</span>
+            <span>ক্লিক: <span id="score">0</span></span>
         </div>
-        <button class="game-btn" id="clickBtn" onclick="handleGameClick()">START CLICKING!</button>
+        <button class="game-btn" id="clickBtn" onclick="handleGameClick()">ক্লিক শুরু করো!</button>
         <div id="gameMsg" class="result-box"></div>
-        <button style="background:#b2bec3; margin-top:5px;" onclick="resetGame()">Reset Game</button>
+        <button id="shareGame" class="share-btn" onclick="shareOnWhatsApp('game')">বন্ধুদের চ্যালেঞ্জ দাও 🏆</button>
+        <button style="background:#b2bec3; margin-top:10px;" onclick="resetGame()">রিসেট গেম</button>
     </div>
 
     <script>
-        // --- Logic: Character Scanner ---
+        let currentScanResult = "";
+        let finalScore = 0;
+
+        // ক্যারেক্টার স্ক্যানার লজিক
         function scanCharacter() {
             const name = document.getElementById('nameInput').value;
             const results = [
-                "১০০% বাটপার, দূরে থাকাই ভালো! 🐍",
-                "ভবিষ্যতের বিলিওনেয়ার, খাতির রাখিস! 💰",
-                "মুখে এক, মনে আরেক! 🎭",
-                "হদ্দ কিপটা, চা-ও খাওয়ায় না! ☕",
-                "একদম খাঁটি মানুষ (বিরিয়ানি প্রিয়)! 🍗",
-                "সারাদিন ঘুমায় আর ফেসবুক চালায়! 😴"
+                "১০০% বাটপার, সাবধানে থাকিস! 🐍",
+                "ভবিষ্যতের বিলিওনেয়ার, ট্রিট রেডি রাখ! 💰",
+                "মুখে মধু পেটে বিষ! 🎭",
+                "হদ্দ কিপটা, জীবনেও চা খাওয়ায় না! ☕",
+                "একদম খাঁটি মানুষ, কলিজার বন্ধু! ❤️",
+                "সারাদিন ঘুমায় আর রিলস দেখে! 😴"
             ];
-            if(!name) return alert("Nam kothay??");
-            const res = results[Math.floor(Math.random() * results.length)];
-            document.getElementById('scanResult').innerText = name + " holo " + res;
+            if(!name) return alert("আগে নাম তো লেখো!");
+            
+            currentScanResult = name + " হলো " + results[Math.floor(Math.random() * results.length)];
+            document.getElementById('scanResult').innerText = currentScanResult;
+            document.getElementById('shareChar').style.display = "block";
         }
 
-        // --- Logic: Click Speed Test ---
+        // ক্লিক গেম লজিক
         let clicks = 0;
         let timeLeft = 10;
         let timerStarted = false;
@@ -67,7 +74,7 @@
             if(!timerStarted) {
                 startTimer();
                 timerStarted = true;
-                document.getElementById('gameMsg').innerText = "Chalaitay thak! 🏃‍♂️";
+                document.getElementById('gameMsg').innerText = "থামা যাবে না! জোরে ক্লিক করো! 🏃‍♂️";
             }
             if(timeLeft > 0) {
                 clicks++;
@@ -87,9 +94,11 @@
         }
 
         function endGame() {
-            let rank = clicks > 60 ? "Pro Legend! 🔥" : (clicks > 30 ? "Motamoti Bhalo" : "Ekdom Slow! 🐢");
-            document.getElementById('gameMsg').innerText = `Khel shesh! Tor rank: ${rank}`;
+            finalScore = clicks;
+            let rank = clicks > 60 ? "প্রো লিজেন্ড! 🔥" : (clicks > 35 ? "মোটামুটি ভালো" : "একেবারে ধীর গতির কচ্ছপ! 🐢");
+            document.getElementById('gameMsg').innerText = `স্কোর: ${clicks}। তুমি একজন ${rank}`;
             document.getElementById('clickBtn').disabled = true;
+            document.getElementById('shareGame').style.display = "block";
         }
 
         function resetGame() {
@@ -101,7 +110,20 @@
             document.getElementById('timer').innerText = "10";
             document.getElementById('gameMsg').innerText = "";
             document.getElementById('clickBtn').disabled = false;
-            document.getElementById('clickBtn').innerText = "START CLICKING!";
+            document.getElementById('shareGame').style.display = "none";
+        }
+
+        // হোয়াটসঅ্যাপ শেয়ার লজিক
+        function shareOnWhatsApp(type) {
+            let text = "";
+            if(type === 'char') {
+                text = "দেখো আমার বন্ধুর আসল রূপ: " + currentScanResult;
+            } else {
+                text = `আমি ১০ সেকেন্ডে ${finalScore} বার ক্লিক করেছি! দেখি তুই পারিস কি না? চ্যালেঞ্জ রইলো!`;
+            }
+            const url = window.location.href;
+            const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " \nচেক করো এখানে: " + url)}`;
+            window.open(waUrl, '_blank');
         }
     </script>
 </body>
