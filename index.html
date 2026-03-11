@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biriyani Lover Masum</title>
+    <style>
+        :root { --primary: #ff4757; --secondary: #ffa502; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f1f2f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; }
+        h1 { color: var(--primary); margin-bottom: 10px; }
+        .biriyani-emoji { font-size: 80px; margin: 20px 0; transition: transform 0.3s; }
+        .biriyani-emoji:hover { transform: scale(1.2) rotate(10deg); }
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        button { border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-yes { background: var(--primary); color: white; }
+        .btn-no { background: #ced4da; color: #495057; }
+        button:hover { opacity: 0.8; transform: translateY(-3px); }
+        #message { margin-top: 20px; font-weight: bold; color: #2f3542; min-height: 24px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Masum's Biriyani Meter 🍗</h1>
+        <p>Bondhu, tui ki ajke amake Biriyani khawaybi?</p>
+        
+        <div class="biriyani-emoji">🥘</div>
+
+        <div class="btn-group">
+            <button class="btn-yes" onclick="showResponse('yes')">Hyan, Chol!</button>
+            <button class="btn-no" id="noBtn" onmouseover="moveButton()">Na, Porer Bar</button>
+        </div>
+
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function showResponse(type) {
+            const msg = document.getElementById('message');
+            if(type === 'yes') {
+                msg.innerText = "Yahoo! Ami ready, kothay jabo bol? 🏃‍♂️💨";
+                msg.style.color = "#2ed573";
+                confettiEffect();
+            }
+        }
+
+        // Funny part: 'No' button ta mouse nilei shore jabe!
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            
+            btn.style.position = 'absolute';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function confettiEffect() {
+            // Tui jodi chash, ami pore ekhane asol confetti add kore dibo.
+            alert("Congratulations! Tor first app ekhon viral hobe! 🎉");
+        }
+    </script>
+</body>
+</html>
